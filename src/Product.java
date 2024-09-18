@@ -1,4 +1,5 @@
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Product {
@@ -15,6 +16,10 @@ public class Product {
 
 
         public Product(String name, String description, BigDecimal price, ProductType type) {
+            if(Objects.isNull(name)) throw new IllegalArgumentException("name cannot be null");
+            if(Objects.isNull(description)) throw new IllegalArgumentException("description cannot be null");
+            if(Objects.isNull(price)) throw new IllegalArgumentException("price cannot be null");
+
             this.id = ++idCont;
             this.name = name;
             this.description = description;
@@ -41,5 +46,16 @@ public class Product {
             return String.format("%s | %s | %s | %s | %.2f", id, type, name, description, price);
         }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return type == product.type && Objects.equals(id, product.id) && Objects.equals(name, product.name) && Objects.equals(description, product.description) && Objects.equals(price, product.price);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, id, name, description, price);
+    }
 }
